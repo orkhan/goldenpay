@@ -65,4 +65,4 @@ The gem is available as open source under the terms of the [MIT License](http://
 
 ## Copyright
 
-Copyright (c) 1918-2023 Orkhan Maharramli
+Copyright (c) 1918-∞ Orkhan Maharramli
