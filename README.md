@@ -1,8 +1,10 @@
 # Goldenpay
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/goldenpay`. To experiment with that code, run `bin/console` for an interactive prompt.
+Unoffical Ruby interface to GoldenPay online payment processing system.
 
-TODO: Delete this and the text above, and describe your gem
+WARNING: This code is in no way affiliated with, authorised, maintained,
+sponsored or endorsed by GoldenPay LLC or any of its affiliates or subsidiaries.
+This is an independent and unofficial. Use at your own risk.
 
 ## Installation
 
@@ -20,24 +22,47 @@ Or install it yourself as:
 
     $ gem install goldenpay
 
+## Configuration
+
+```ruby
+Goldenpay.configure do |config|
+  config.merchant_name = "your_merchant_name"
+  config.auth_key = "your_auth_key"
+end
+```
+
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+# Payment authorization
+options = {
+  card_type: "v", # v for visa, or m for mastercard
+  lang: "en",
+  amount: "100",
+  description: "testing payment"
+}
 
-## Development
+request_options = Goldenpay::Request.generate_options(options)
 
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+begin
+  payment_key = Goldenpay::Request.get_payment_key request_options
+  return redirect_to Goldenpay.payment_page_url + payment_key
+rescue Goldenpay::Error => e
+  puts e.message
+end
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/goldenpay. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+# Check transaction results
+begin
+  results = Goldenpay::Request.get_results("payment_key")
+rescue Goldenpay::Error => e
+  puts e.message
+end
+```
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
 
-## Code of Conduct
+## Copyright
 
-Everyone interacting in the Goldenpay project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/goldenpay/blob/master/CODE_OF_CONDUCT.md).
+Copyright (c) 1918-2023 Orkhan Maharramli
